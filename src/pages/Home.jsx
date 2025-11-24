@@ -6,236 +6,278 @@ import toast from 'react-hot-toast';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Home = () => {
-  const [featuredMovies, setFeaturedMovies] = useState([]);
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [recentMovies, setRecentMovies] = useState([]);
-  const [stats, setStats] = useState({ totalMovies: 0, totalUsers: 0 });
-  const [loading, setLoading] = useState(true);
-  const [currentSlide, setCurrentSlide] = useState(0);
+    const [featuredMovies, setFeaturedMovies] = useState([]);
+    const [topRatedMovies, setTopRatedMovies] = useState([]);
+    const [recentMovies, setRecentMovies] = useState([]);
+    const [stats, setStats] = useState({ totalMovies: 0, totalUsers: 0 });
+    const [loading, setLoading] = useState(true);
+    const [currentSlide, setCurrentSlide] = useState(0);
 
-  useEffect(() => {
-    fetchHomeData();
-  }, []);
+    useEffect(() => {
+        fetchHomeData();
+    }, []);
 
-  useEffect(() => {
-    if (featuredMovies.length > 0) {
-      const timer = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % featuredMovies.length);
-      }, 5000);
-      return () => clearInterval(timer);
+    useEffect(() => {
+        if (featuredMovies.length > 0) {
+            const timer = setInterval(() => {
+                setCurrentSlide((prev) => (prev + 1) % featuredMovies.length);
+            }, 5000);
+            return () => clearInterval(timer);
+        }
+    }, [featuredMovies]);
+
+    const fetchHomeData = async () => {
+        try {
+            const [moviesRes, topRatedRes, recentRes] = await Promise.all([
+                axios.get(`${API_URL}/api/movies`),
+                axios.get(`${API_URL}/api/movies/top-rated`),
+                axios.get(`${API_URL}/api/movies/recent`)
+            ]);
+
+            setFeaturedMovies(moviesRes.data.slice(0, 5));
+            setTopRatedMovies(topRatedRes.data);
+            setRecentMovies(recentRes.data);
+            setStats({
+                totalMovies: moviesRes.data.length,
+                totalUsers: 150
+            });
+        } catch (error) {
+            console.error('Error fetching home data:', error);
+            toast.error('Failed to load data');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-neutral">
+                <span className="loading loading-spinner loading-lg text-primary"></span>
+            </div>
+        );
     }
-  }, [featuredMovies]);
 
-  const fetchHomeData = async () => {
-    try {
-      const [moviesRes, topRatedRes, recentRes] = await Promise.all([
-        axios.get(`${API_URL}/api/movies`),
-        axios.get(`${API_URL}/api/movies/top-rated`),
-        axios.get(`${API_URL}/api/movies/recent`)
-      ]);
-
-      setFeaturedMovies(moviesRes.data.slice(0, 5));
-      setTopRatedMovies(topRatedRes.data);
-      setRecentMovies(recentRes.data);
-      setStats({
-        totalMovies: moviesRes.data.length,
-        totalUsers: 150 // Mock data - replace with real API
-      });
-    } catch (error) {
-      console.error('Error fetching home data:', error);
-      toast.error('Failed to load data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const genres = [
-    { name: 'Action', icon: '💥', color: 'bg-red-500' },
-    { name: 'Drama', icon: '🎭', color: 'bg-purple-500' },
-    { name: 'Comedy', icon: '😂', color: 'bg-yellow-500' },
-    { name: 'Sci-Fi', icon: '🚀', color: 'bg-blue-500' },
-    { name: 'Horror', icon: '👻', color: 'bg-gray-800' },
-    { name: 'Romance', icon: '💕', color: 'bg-pink-500' }
-  ];
-
-  if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
+        <div className="min-h-screen bg-neutral">
+            {/* Hero Section */}
+            <div className="relative h-[90vh] overflow-hidden -mt-20">
+                {featuredMovies.map((movie, index) => (
+                    <div
+                        key={movie._id}
+                        className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                    >
+                        <div className="relative h-full">
+                            <img
+                                src={movie.posterUrl}
+                                alt={movie.title}
+                                className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+
+                            <div className="absolute bottom-0 left-0 right-0 pb-32 pt-20 px-8 md:px-16">
+                                <div className="max-w-7xl mx-auto">
+                                    <div className="max-w-3xl space-y-6">
+                                        <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
+                                            {movie.title}
+                                        </h1>
+                                        <div className="flex items-center gap-4 text-sm md:text-base">
+                                            <span className="px-3 py-1 bg-accent text-black font-bold rounded">
+                                                ⭐ {movie.rating}
+                                            </span>
+                                            <span className="text-gray-300">{movie.releaseYear}</span>
+                                            <span className="text-gray-300">{movie.genre}</span>
+                                            <span className="text-gray-300">{movie.duration} min</span>
+                                        </div>
+                                        <p className="text-lg md:text-xl text-gray-300 line-clamp-3 leading-relaxed">
+                                            {movie.plotSummary}
+                                        </p>
+                                        <div className="flex gap-4 pt-4">
+                                            <Link
+                                                to={`/movies/${movie._id}`}
+                                                className="btn btn-primary btn-lg border-none text-white font-bold px-10 normal-case hover:bg-primary/80 transition-all"
+                                            >
+                                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                                                </svg>
+                                                Play Now
+                                            </Link>
+                                            <Link
+                                                to={`/movies/${movie._id}`}
+                                                className="btn btn-lg bg-white/20 backdrop-blur-md text-white border-white/40 hover:bg-white/30 px-10 normal-case"
+                                            >
+                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                More Info
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+
+                {/* Carousel Indicators */}
+                <div className="absolute bottom-8 right-8 flex gap-2">
+                    {featuredMovies.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentSlide(index)}
+                            className={`h-1 transition-all ${index === currentSlide ? 'w-8 bg-primary' : 'w-2 bg-white/50 hover:bg-white/80'
+                                }`}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="max-w-[1920px] mx-auto px-8 md:px-16 -mt-24 relative z-10">
+                {/* Top Rated Movies */}
+                <section className="mb-16">
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl md:text-3xl font-bold text-white">Top Rated on MovieMaster</h2>
+                        <Link to="/movies" className="text-primary hover:text-primary/80 font-semibold flex items-center gap-2">
+                            Explore All
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </Link>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        {topRatedMovies.map((movie, index) => (
+                            <Link
+                                key={movie._id}
+                                to={`/movies/${movie._id}`}
+                                className="group relative aspect-[2/3] overflow-hidden rounded-lg bg-base-200 hover:scale-105 transition-transform duration-300"
+                            >
+                                <img
+                                    src={movie.posterUrl}
+                                    alt={movie.title}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="absolute bottom-0 p-4 space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="px-2 py-0.5 bg-accent text-black text-xs font-bold rounded">
+                                                #{index + 1}
+                                            </span>
+                                            <span className="px-2 py-0.5 bg-white/20 text-white text-xs font-semibold rounded">
+                                                ⭐ {movie.rating}
+                                            </span>
+                                        </div>
+                                        <h3 className="text-white font-bold text-sm line-clamp-2">{movie.title}</h3>
+                                        <p className="text-gray-300 text-xs">{movie.releaseYear}</p>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Recently Added */}
+                <section className="mb-16">
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl md:text-3xl font-bold text-white">New Arrivals</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {recentMovies.map((movie) => (
+                            <Link
+                                key={movie._id}
+                                to={`/movies/${movie._id}`}
+                                className="group bg-neutral/50 border border-white/10 rounded-lg overflow-hidden hover:bg-neutral/70 hover:border-primary/30 transition-all flex"
+                            >
+                                <div className="w-32 sm:w-40 flex-shrink-0">
+                                    <img
+                                        src={movie.posterUrl}
+                                        alt={movie.title}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <div className="p-4 flex flex-col justify-between flex-1">
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="px-2 py-0.5 bg-success text-white text-xs font-bold rounded">NEW</span>
+                                            <span className="px-2 py-0.5 bg-accent text-black text-xs font-bold rounded">⭐ {movie.rating}</span>
+                                        </div>
+                                        <h3 className="text-white font-bold text-lg mb-2 group-hover:text-primary transition-colors">
+                                            {movie.title}
+                                        </h3>
+                                        <p className="text-gray-400 text-sm line-clamp-2 mb-3">{movie.plotSummary}</p>
+                                    </div>
+                                    <div className="flex items-center gap-3 text-xs text-gray-400">
+                                        <span>{movie.releaseYear}</span>
+                                        <span>•</span>
+                                        <span>{movie.genre}</span>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Stats Section */}
+                <section className="mb-16 py-12 bg-neutral/50 rounded-2xl px-8 border border-white/10">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                        <div>
+                            <div className="text-4xl md:text-5xl font-bold text-primary mb-2">{stats.totalMovies}+</div>
+                            <div className="text-gray-300 text-sm font-medium uppercase tracking-wide">Movies</div>
+                        </div>
+                        <div>
+                            <div className="text-4xl md:text-5xl font-bold text-accent mb-2">8.5</div>
+                            <div className="text-gray-300 text-sm font-medium uppercase tracking-wide">Avg Rating</div>
+                        </div>
+                        <div>
+                            <div className="text-4xl md:text-5xl font-bold text-success mb-2">{stats.totalUsers}+</div>
+                            <div className="text-gray-300 text-sm font-medium uppercase tracking-wide">Users</div>
+                        </div>
+                        <div>
+                            <div className="text-4xl md:text-5xl font-bold text-info mb-2">24/7</div>
+                            <div className="text-gray-300 text-sm font-medium uppercase tracking-wide">Access</div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* About Section */}
+                <section className="mb-20 py-16 text-center">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                        Your Personal <span className="text-primary">Movie Library</span>
+                    </h2>
+                    <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-12">
+                        Organize, discover, and track your favorite movies all in one place.
+                        Join thousands of movie enthusiasts managing their collections effortlessly.
+                    </p>
+
+                    <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                        <div className="bg-neutral/50 p-8 rounded-xl hover:bg-neutral/70 transition-all border border-white/10">
+                            <div className="text-5xl mb-4">📚</div>
+                            <h3 className="text-xl font-bold text-white mb-3">Organize</h3>
+                            <p className="text-gray-300">
+                                Keep your movie collection organized and easily accessible
+                            </p>
+                        </div>
+                        <div className="bg-neutral/50 p-8 rounded-xl hover:bg-neutral/70 transition-all border border-white/10">
+                            <div className="text-5xl mb-4">🔍</div>
+                            <h3 className="text-xl font-bold text-white mb-3">Discover</h3>
+                            <p className="text-gray-300">
+                                Find new favorites based on ratings and genres
+                            </p>
+                        </div>
+                        <div className="bg-neutral/50 p-8 rounded-xl hover:bg-neutral/70 transition-all border border-white/10">
+                            <div className="text-5xl mb-4">⭐</div>
+                            <h3 className="text-xl font-bold text-white mb-3">Rate & Share</h3>
+                            <p className="text-gray-300">
+                                Share your opinions and see what others think
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
     );
-  }
-
-  return (
-    <div className="min-h-screen">
-      {/* Hero Carousel Section */}
-      <div className="relative h-[500px] md:h-[600px] overflow-hidden">
-        {featuredMovies.map((movie, index) => (
-          <div
-            key={movie._id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <div
-              className="hero min-h-full"
-              style={{
-                backgroundImage: `url(${movie.posterUrl})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
-            >
-              <div className="hero-overlay bg-opacity-70"></div>
-              <div className="hero-content text-center text-neutral-content">
-                <div className="max-w-md">
-                  <h1 className="mb-5 text-5xl font-bold animate-fade-in">{movie.title}</h1>
-                  <p className="mb-5 line-clamp-3">{movie.plotSummary}</p>
-                  <div className="flex gap-2 justify-center mb-5">
-                    <span className="badge badge-warning">⭐ {movie.rating}</span>
-                    <span className="badge badge-info">{movie.genre}</span>
-                    <span className="badge badge-secondary">{movie.releaseYear}</span>
-                  </div>
-                  <Link to={`/movies/${movie._id}`} className="btn btn-primary">
-                    View Details
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-        
-        {/* Carousel Navigation */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {featuredMovies.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full ${
-                index === currentSlide ? 'bg-primary' : 'bg-white bg-opacity-50'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Statistics Section */}
-      <div className="stats stats-vertical lg:stats-horizontal shadow w-full">
-        <div className="stat place-items-center">
-          <div className="stat-title">Total Movies</div>
-          <div className="stat-value text-primary">{stats.totalMovies}</div>
-          <div className="stat-desc">In our collection</div>
-        </div>
-        
-        <div className="stat place-items-center">
-          <div className="stat-title">Total Users</div>
-          <div className="stat-value text-secondary">{stats.totalUsers}+</div>
-          <div className="stat-desc">Active community members</div>
-        </div>
-        
-        <div className="stat place-items-center">
-          <div className="stat-title">Average Rating</div>
-          <div className="stat-value">8.5</div>
-          <div className="stat-desc">⭐ Quality content</div>
-        </div>
-      </div>
-
-      {/* Top Rated Movies Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-4xl font-bold">Top Rated Movies</h2>
-          <Link to="/movies" className="btn btn-outline btn-sm">View All</Link>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {topRatedMovies.map((movie) => (
-            <div key={movie._id} className="card bg-base-100 shadow-xl card-hover">
-              <figure className="h-64">
-                <img src={movie.posterUrl} alt={movie.title} className="w-full h-full object-cover" />
-              </figure>
-              <div className="card-body p-4">
-                <h3 className="card-title text-sm">{movie.title}</h3>
-                <div className="flex justify-between items-center text-xs">
-                  <span className="badge badge-sm badge-warning">⭐ {movie.rating}</span>
-                  <span>{movie.releaseYear}</span>
-                </div>
-                <Link to={`/movies/${movie._id}`} className="btn btn-primary btn-xs mt-2">
-                  Details
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Recently Added Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16 bg-base-200">
-        <h2 className="text-4xl font-bold mb-8 text-center">Recently Added</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recentMovies.map((movie) => (
-            <div key={movie._id} className="card lg:card-side bg-base-100 shadow-xl">
-              <figure className="lg:w-1/3">
-                <img src={movie.posterUrl} alt={movie.title} className="w-full h-48 lg:h-full object-cover" />
-              </figure>
-              <div className="card-body lg:w-2/3">
-                <h3 className="card-title">{movie.title}</h3>
-                <p className="text-sm text-gray-600 line-clamp-2">{movie.plotSummary}</p>
-                <div className="flex gap-2 flex-wrap mt-2">
-                  <span className="badge badge-outline">{movie.genre}</span>
-                  <span className="badge badge-outline">⭐ {movie.rating}</span>
-                </div>
-                <div className="card-actions justify-end mt-2">
-                  <Link to={`/movies/${movie._id}`} className="btn btn-primary btn-sm">
-                    View Details
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Genre Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold mb-8 text-center">Browse by Genre</h2>
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {genres.map((genre) => (
-            <div key={genre.name} className={`${genre.color} rounded-lg p-6 text-white text-center cursor-pointer transform transition hover:scale-105 hover:shadow-xl`}>
-              <div className="text-4xl mb-2">{genre.icon}</div>
-              <h3 className="font-bold">{genre.name}</h3>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* About Platform Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg mb-16">
-        <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold mb-6">About MovieMaster Pro</h2>
-          <p className="text-lg mb-4">
-            MovieMaster Pro is your ultimate companion for managing and discovering movies. 
-            Whether you're a casual viewer or a cinema enthusiast, our platform helps you 
-            organize your favorite films, discover new releases, and keep track of what to watch next.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            <div className="bg-white bg-opacity-20 rounded-lg p-6">
-              <h3 className="font-bold text-xl mb-2">📚 Organize</h3>
-              <p>Manage your personal movie collection effortlessly</p>
-            </div>
-            <div className="bg-white bg-opacity-20 rounded-lg p-6">
-              <h3 className="font-bold text-xl mb-2">🔍 Discover</h3>
-              <p>Find new movies based on ratings and genres</p>
-            </div>
-            <div className="bg-white bg-opacity-20 rounded-lg p-6">
-              <h3 className="font-bold text-xl mb-2">⭐ Rate</h3>
-              <p>Share your opinions and see what others think</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
 };
 
 export default Home;

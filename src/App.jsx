@@ -10,6 +10,7 @@ import MovieDetails from './pages/MovieDetails';
 import AddMovie from './pages/AddMovie';
 import UpdateMovie from './pages/UpdateMovie';
 import MyCollection from './pages/MyCollection';
+import Watchlist from './pages/Watchlist';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
@@ -27,33 +28,41 @@ function App() {
               <Route path="/movies/:id" element={<MovieDetails />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              
+
               {/* Protected Routes */}
-              <Route 
-                path="/add-movie" 
+              <Route
+                path="/add-movie"
                 element={
                   <PrivateRoute>
                     <AddMovie />
                   </PrivateRoute>
-                } 
+                }
               />
-              <Route 
-                path="/update-movie/:id" 
+              <Route
+                path="/update-movie/:id"
                 element={
                   <PrivateRoute>
                     <UpdateMovie />
                   </PrivateRoute>
-                } 
+                }
               />
-              <Route 
-                path="/my-collection" 
+              <Route
+                path="/my-collection"
                 element={
                   <PrivateRoute>
                     <MyCollection />
                   </PrivateRoute>
-                } 
+                }
               />
-              
+              <Route
+                path="/watchlist"
+                element={
+                  <PrivateRoute>
+                    <Watchlist />
+                  </PrivateRoute>
+                }
+              />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

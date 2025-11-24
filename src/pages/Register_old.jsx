@@ -84,106 +84,100 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-neutral flex items-center justify-center px-4 py-8 pt-20">
-            <div className="w-full max-w-md">
-                <div className="bg-base-200 rounded-2xl shadow-2xl p-8 border border-white/10">
-                    {/* Logo */}
-                    <div className="text-center mb-8">
-                        <div className="flex items-center justify-center gap-3 mb-4">
-                            <span className="text-4xl">🎬</span>
-                            <span className="text-3xl font-bold text-white">
-                                Movie<span className="text-primary">Master</span>
-                            </span>
-                        </div>
-                        <h2 className="text-2xl font-bold text-white">Create Account</h2>
-                        <p className="text-gray-400 mt-2">Join us to start your collection</p>
-                    </div>
+        <div className="min-h-screen flex items-center justify-center bg-base-200 px-4 py-8">
+            <div className="card w-full max-w-md shadow-2xl bg-base-100">
+                <div className="card-body">
+                    <h2 className="text-3xl font-bold text-center mb-6">Register</h2>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                        <div>
-                            <label className="block text-white font-medium mb-2">
-                                Name
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Name</span>
                             </label>
                             <input
                                 type="text"
                                 name="name"
                                 placeholder="Your full name"
-                                className="input w-full bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                className="input input-bordered"
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-white font-medium mb-2">
-                                Email
+                        <div className="form-control mt-4">
+                            <label className="label">
+                                <span className="label-text">Email</span>
                             </label>
                             <input
                                 type="email"
                                 name="email"
                                 placeholder="your@email.com"
-                                className="input w-full bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                className="input input-bordered"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-white font-medium mb-2">
-                                Photo URL
+                        <div className="form-control mt-4">
+                            <label className="label">
+                                <span className="label-text">Photo URL</span>
                             </label>
                             <input
                                 type="url"
                                 name="photoURL"
                                 placeholder="https://example.com/photo.jpg"
-                                className="input w-full bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                className="input input-bordered"
                                 value={formData.photoURL}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-white font-medium mb-2">
-                                Password
+                        <div className="form-control mt-4">
+                            <label className="label">
+                                <span className="label-text">Password</span>
                             </label>
                             <input
                                 type="password"
                                 name="password"
                                 placeholder="Enter a strong password"
-                                className={`input w-full bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none ${errors.password ? 'border-error' : ''}`}
+                                className={`input input-bordered ${errors.password ? 'input-error' : ''}`}
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
                             />
                             {errors.password && (
-                                <div className="mt-2 space-y-1">
+                                <label className="label">
                                     {errors.password.map((error, index) => (
-                                        <p key={index} className="text-error text-sm">{error}</p>
+                                        <span key={index} className="label-text-alt text-error block">{error}</span>
                                     ))}
-                                </div>
+                                </label>
                             )}
-                            <p className="text-gray-500 text-xs mt-2">
-                                Must contain: uppercase, lowercase, min 6 characters
-                            </p>
+                            <label className="label">
+                                <span className="label-text-alt text-sm">
+                                    Must contain: uppercase, lowercase, min 6 characters
+                                </span>
+                            </label>
                         </div>
 
-                        <button
-                            type="submit"
-                            className="btn btn-primary w-full text-lg h-12"
-                            disabled={loading}
-                        >
-                            {loading ? <span className="loading loading-spinner"></span> : 'Register'}
-                        </button>
+                        <div className="form-control mt-6">
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                disabled={loading}
+                            >
+                                {loading ? <span className="loading loading-spinner"></span> : 'Register'}
+                            </button>
+                        </div>
                     </form>
 
-                    <div className="divider text-gray-500">OR</div>
+                    <div className="divider">OR</div>
 
                     <button
                         onClick={handleGoogleLogin}
-                        className="btn w-full bg-white/10 border-white/20 hover:bg-white/20 text-white h-12"
+                        className="btn btn-outline"
                         disabled={loading}
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -195,9 +189,9 @@ const Register = () => {
                         Continue with Google
                     </button>
 
-                    <p className="text-center mt-6 text-gray-400">
-                        Already have an account?{' '}
-                        <Link to="/login" className="text-primary hover:underline font-medium">Login here</Link>
+                    <p className="text-center mt-4">
+                        Already have an account?
+                        <Link to="/login" className="link link-primary ml-1">Login here</Link>
                     </p>
                 </div>
             </div>
