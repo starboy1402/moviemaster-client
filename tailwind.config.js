@@ -25,7 +25,23 @@ export default {
                     "warning": "#FBBD23",
                     "error": "#F87272",
                 },
+                netflixLight: {
+                    "primary": "#E50914",
+                    "secondary": "#831010",
+                    "accent": "#F5C518",
+                    "neutral": "#F3F4F6",
+                    "base-100": "#FFFFFF",
+                    "base-200": "#F9FAFB",
+                    "base-300": "#E5E7EB",
+                    "base-content": "#1F2937",
+                    "info": "#3ABFF8",
+                    "success": "#36D399",
+                    "warning": "#FBBD23",
+                    "error": "#F87272",
+                },
             },
+            "light",
+            "dark"
         ],
     },
 }

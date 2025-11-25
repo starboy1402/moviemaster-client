@@ -84,31 +84,31 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-neutral flex items-center justify-center px-4 py-8 pt-20">
+        <div className="min-h-screen bg-base-100 flex items-center justify-center px-4 py-8 pt-20 transition-colors duration-300">
             <div className="w-full max-w-md">
-                <div className="bg-base-200 rounded-2xl shadow-2xl p-8 border border-white/10">
+                <div className="bg-base-200/50 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-base-content/10">
                     {/* Logo */}
                     <div className="text-center mb-8">
                         <div className="flex items-center justify-center gap-3 mb-4">
                             <span className="text-4xl">🎬</span>
-                            <span className="text-3xl font-bold text-white">
+                            <span className="text-3xl font-bold text-base-content">
                                 Movie<span className="text-primary">Master</span>
                             </span>
                         </div>
-                        <h2 className="text-2xl font-bold text-white">Create Account</h2>
-                        <p className="text-gray-400 mt-2">Join us to start your collection</p>
+                        <h2 className="text-2xl font-bold text-base-content">Create Account</h2>
+                        <p className="text-base-content/60 mt-2">Join us to start your collection</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div>
-                            <label className="block text-white font-medium mb-2">
+                            <label className="block text-base-content font-medium mb-2">
                                 Name
                             </label>
                             <input
                                 type="text"
                                 name="name"
                                 placeholder="Your full name"
-                                className="input w-full bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
@@ -116,14 +116,14 @@ const Register = () => {
                         </div>
 
                         <div>
-                            <label className="block text-white font-medium mb-2">
+                            <label className="block text-base-content font-medium mb-2">
                                 Email
                             </label>
                             <input
                                 type="email"
                                 name="email"
                                 placeholder="your@email.com"
-                                className="input w-full bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
@@ -131,14 +131,14 @@ const Register = () => {
                         </div>
 
                         <div>
-                            <label className="block text-white font-medium mb-2">
+                            <label className="block text-base-content font-medium mb-2">
                                 Photo URL
                             </label>
                             <input
                                 type="url"
                                 name="photoURL"
                                 placeholder="https://example.com/photo.jpg"
-                                className="input w-full bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                 value={formData.photoURL}
                                 onChange={handleChange}
                                 required
@@ -146,14 +146,14 @@ const Register = () => {
                         </div>
 
                         <div>
-                            <label className="block text-white font-medium mb-2">
+                            <label className="block text-base-content font-medium mb-2">
                                 Password
                             </label>
                             <input
                                 type="password"
                                 name="password"
                                 placeholder="Enter a strong password"
-                                className={`input w-full bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none ${errors.password ? 'border-error' : ''}`}
+                                className={`input input-bordered w-full bg-base-100 text-base-content focus:border-primary focus:outline-none ${errors.password ? 'border-error' : ''}`}
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
@@ -165,7 +165,7 @@ const Register = () => {
                                     ))}
                                 </div>
                             )}
-                            <p className="text-gray-500 text-xs mt-2">
+                            <p className="text-base-content/50 text-xs mt-2">
                                 Must contain: uppercase, lowercase, min 6 characters
                             </p>
                         </div>
@@ -179,11 +179,11 @@ const Register = () => {
                         </button>
                     </form>
 
-                    <div className="divider text-gray-500">OR</div>
+                    <div className="divider text-base-content/60">OR</div>
 
                     <button
                         onClick={handleGoogleLogin}
-                        className="btn w-full bg-white/10 border-white/20 hover:bg-white/20 text-white h-12"
+                        className="btn btn-outline w-full h-12 gap-3 text-base-content hover:bg-base-content hover:text-base-100"
                         disabled={loading}
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -195,7 +195,7 @@ const Register = () => {
                         Continue with Google
                     </button>
 
-                    <p className="text-center mt-6 text-gray-400">
+                    <p className="text-center mt-6 text-base-content/60">
                         Already have an account?{' '}
                         <Link to="/login" className="text-primary hover:underline font-medium">Login here</Link>
                     </p>

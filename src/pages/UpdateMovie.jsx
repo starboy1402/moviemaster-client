@@ -97,30 +97,33 @@ const UpdateMovie = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center min-h-screen bg-neutral">
+            <div className="flex justify-center items-center min-h-screen bg-base-100">
                 <span className="loading loading-spinner loading-lg text-primary"></span>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-neutral pt-24 pb-16">
-            <div className="max-w-4xl mx-auto px-8">
-                <h1 className="text-4xl font-bold mb-8 text-white">Update Movie</h1>
+        <div className="min-h-screen bg-base-100 pt-24 pb-16 transition-colors duration-300">
+            <div className="max-w-4xl mx-auto px-4 md:px-8">
+                <div className="text-center mb-12">
+                    <h1 className="text-4xl font-bold text-base-content mb-4">Update Movie</h1>
+                    <p className="text-base-content/60">Update the details of your movie</p>
+                </div>
 
-                <div className="bg-neutral/50 border border-white/10 rounded-2xl shadow-xl p-8">
+                <div className="bg-base-200/50 backdrop-blur-sm border border-base-content/10 rounded-3xl shadow-xl p-8 md:p-10">
                     <form onSubmit={handleSubmit}>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Title */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Title *</span>
+                                    <span className="label-text text-base-content font-medium">Title *</span>
                                 </label>
                                 <input
                                     type="text"
                                     name="title"
                                     placeholder="Movie title"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.title}
                                     onChange={handleChange}
                                     required
@@ -130,11 +133,11 @@ const UpdateMovie = () => {
                             {/* Genre */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Genre *</span>
+                                    <span className="label-text text-base-content font-medium">Genre *</span>
                                 </label>
                                 <select
                                     name="genre"
-                                    className="select bg-neutral border-white/20 text-white focus:border-primary focus:outline-none"
+                                    className="select select-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.genre}
                                     onChange={handleChange}
                                     required
@@ -154,7 +157,7 @@ const UpdateMovie = () => {
                             {/* Release Year */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Release Year *</span>
+                                    <span className="label-text text-base-content font-medium">Release Year *</span>
                                 </label>
                                 <input
                                     type="number"
@@ -162,7 +165,7 @@ const UpdateMovie = () => {
                                     placeholder="2024"
                                     min="1900"
                                     max="2025"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.releaseYear}
                                     onChange={handleChange}
                                     required
@@ -172,13 +175,13 @@ const UpdateMovie = () => {
                             {/* Director */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Director *</span>
+                                    <span className="label-text text-base-content font-medium">Director *</span>
                                 </label>
                                 <input
                                     type="text"
                                     name="director"
                                     placeholder="Director name"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.director}
                                     onChange={handleChange}
                                     required
@@ -188,13 +191,13 @@ const UpdateMovie = () => {
                             {/* Cast */}
                             <div className="form-control md:col-span-2">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Cast *</span>
+                                    <span className="label-text text-base-content font-medium">Cast *</span>
                                 </label>
                                 <input
                                     type="text"
                                     name="cast"
                                     placeholder="Actor 1, Actor 2, Actor 3"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.cast}
                                     onChange={handleChange}
                                     required
@@ -204,7 +207,7 @@ const UpdateMovie = () => {
                             {/* Rating */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Rating (0-10) *</span>
+                                    <span className="label-text text-base-content font-medium">Rating (0-10) *</span>
                                 </label>
                                 <input
                                     type="number"
@@ -213,7 +216,7 @@ const UpdateMovie = () => {
                                     min="0"
                                     max="10"
                                     step="0.1"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.rating}
                                     onChange={handleChange}
                                     required
@@ -223,14 +226,14 @@ const UpdateMovie = () => {
                             {/* Duration */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Duration (minutes) *</span>
+                                    <span className="label-text text-base-content font-medium">Duration (minutes) *</span>
                                 </label>
                                 <input
                                     type="number"
                                     name="duration"
                                     placeholder="120"
                                     min="1"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.duration}
                                     onChange={handleChange}
                                     required
@@ -240,13 +243,13 @@ const UpdateMovie = () => {
                             {/* Language */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Language *</span>
+                                    <span className="label-text text-base-content font-medium">Language *</span>
                                 </label>
                                 <input
                                     type="text"
                                     name="language"
                                     placeholder="English"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.language}
                                     onChange={handleChange}
                                     required
@@ -256,13 +259,13 @@ const UpdateMovie = () => {
                             {/* Country */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Country *</span>
+                                    <span className="label-text text-base-content font-medium">Country *</span>
                                 </label>
                                 <input
                                     type="text"
                                     name="country"
                                     placeholder="USA"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.country}
                                     onChange={handleChange}
                                     required
@@ -272,13 +275,13 @@ const UpdateMovie = () => {
                             {/* Poster URL */}
                             <div className="form-control md:col-span-2">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Poster URL *</span>
+                                    <span className="label-text text-base-content font-medium">Poster URL *</span>
                                 </label>
                                 <input
                                     type="url"
                                     name="posterUrl"
                                     placeholder="https://example.com/poster.jpg"
-                                    className="input bg-neutral border-white/20 text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+                                    className="input input-bordered bg-base-100 text-base-content focus:border-primary focus:outline-none"
                                     value={formData.posterUrl}
                                     onChange={handleChange}
                                     required
@@ -288,12 +291,12 @@ const UpdateMovie = () => {
                             {/* Plot Summary */}
                             <div className="form-control md:col-span-2">
                                 <label className="label">
-                                    <span className="label-text text-white font-medium">Plot Summary *</span>
+                                    <span className="label-text text-base-content font-medium">Plot Summary *</span>
                                 </label>
                                 <textarea
                                     name="plotSummary"
                                     placeholder="Brief description of the movie plot"
-                                    className="textarea textarea-bordered h-24"
+                                    className="textarea textarea-bordered bg-base-100 text-base-content h-32 focus:border-primary focus:outline-none"
                                     value={formData.plotSummary}
                                     onChange={handleChange}
                                     required
@@ -301,10 +304,10 @@ const UpdateMovie = () => {
                             </div>
                         </div>
 
-                        <div className="form-control mt-6">
+                        <div className="form-control mt-8">
                             <button
                                 type="submit"
-                                className="btn btn-primary"
+                                className="btn btn-primary btn-lg w-full md:w-auto md:px-12 mx-auto"
                                 disabled={submitting}
                             >
                                 {submitting ? <span className="loading loading-spinner"></span> : 'Update Movie'}

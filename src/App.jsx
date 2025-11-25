@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PrivateRoute from './routes/PrivateRoute';
@@ -17,60 +18,62 @@ import NotFound from './pages/NotFound';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/movies" element={<AllMovies />} />
-              <Route path="/movies/:id" element={<MovieDetails />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="flex flex-col min-h-screen bg-base-100 text-base-content transition-colors duration-300">
+            <Navbar />
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/movies" element={<AllMovies />} />
+                <Route path="/movies/:id" element={<MovieDetails />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-              {/* Protected Routes */}
-              <Route
-                path="/add-movie"
-                element={
-                  <PrivateRoute>
-                    <AddMovie />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/update-movie/:id"
-                element={
-                  <PrivateRoute>
-                    <UpdateMovie />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/my-collection"
-                element={
-                  <PrivateRoute>
-                    <MyCollection />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/watchlist"
-                element={
-                  <PrivateRoute>
-                    <Watchlist />
-                  </PrivateRoute>
-                }
-              />
+                {/* Protected Routes */}
+                <Route
+                  path="/add-movie"
+                  element={
+                    <PrivateRoute>
+                      <AddMovie />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/update-movie/:id"
+                  element={
+                    <PrivateRoute>
+                      <UpdateMovie />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/my-collection"
+                  element={
+                    <PrivateRoute>
+                      <MyCollection />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/watchlist"
+                  element={
+                    <PrivateRoute>
+                      <Watchlist />
+                    </PrivateRoute>
+                  }
+                />
 
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-        <Toaster position="top-right" />
-      </Router>
-    </AuthProvider>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+          <Toaster position="top-right" />
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
